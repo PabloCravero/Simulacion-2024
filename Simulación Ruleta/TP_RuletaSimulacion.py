@@ -50,9 +50,9 @@ if (numerito >= 0) and (numerito <= 36):
         resultados['desvios'].append(desvios)
         resultados['promedios'].append(promedios)
     #Graficos
-    plt.figure(figsize=(10, 8))
+    plt.figure(figsize=(18, 10))
 
-    plt.subplot(3, 3, 1)
+    plt.subplot(2, 4, 1)
     for frecuencia_relativa in resultados['frecuencias_relativas']:
         plt.plot(frecuencia_relativa)
     plt.xlabel('Índice')
@@ -60,7 +60,7 @@ if (numerito >= 0) and (numerito <= 36):
     plt.title('Nube de Curvas - Frecuencias Relativas')
     plt.axhline(y=frecuencia_relativa_esperada, color='black', linestyle='--', label='Frecuencia Relativa Esperada')
 
-    plt.subplot(3, 3, 2)
+    plt.subplot(2, 4, 3)
     for varianza in resultados['varianzas']:
         plt.plot(varianza)
     plt.xlabel('Índice')
@@ -68,7 +68,7 @@ if (numerito >= 0) and (numerito <= 36):
     plt.title('Nube de Curvas - Varianzas')
     plt.axhline(y=varianza_esperada, color='black', linestyle='--', label='Varianza Esperada')
 
-    plt.subplot(3, 3, 3)
+    plt.subplot(2, 4, 5)
     for desvio in resultados['desvios']:
         plt.plot(desvio)
     plt.xlabel('Índice')
@@ -76,7 +76,7 @@ if (numerito >= 0) and (numerito <= 36):
     plt.title('Nube de Curvas - Desvíos')
     plt.axhline(y=desvio_esperado, color='black', linestyle='--', label='Desvio Esperado')
 
-    plt.subplot(3, 3, 4)
+    plt.subplot(2, 4, 7)
     for promedio in resultados['promedios']:
         plt.plot(promedio)
     plt.xlabel('Índice')
@@ -85,18 +85,31 @@ if (numerito >= 0) and (numerito <= 36):
     plt.axhline(y=promedio_esperado, color='black', linestyle='--', label='Promedio Esperado')
 
     #Histogramas
-    plt.subplot(3, 3, 5)
+    plt.subplot(2, 4, 2)
     plt.hist(resultados['frecuencias_relativas'], bins=20, edgecolor='black', alpha=0.7)
     plt.xlabel('Frecuencia Relativa')
     plt.ylabel('Frecuencia')
     plt.title('Histograma - Frecuencias Relativas')
 
-    plt.subplot(3, 3, 6)
+    plt.subplot(2, 4, 4)
     plt.hist(resultados['varianzas'], bins=20, edgecolor='black', alpha=0.7)
     plt.xlabel('Varianza')
     plt.ylabel('Frecuencia')
     plt.title('Histograma - Varianzas')
 
+    plt.subplot(2, 4, 6)
+    plt.hist(resultados['desvios'], bins=20, edgecolor='black', alpha=0.7)
+    plt.xlabel('Desvío')
+    plt.ylabel('Frecuencia')
+    plt.title('Histograma - Desvío')
+
+    plt.subplot(2, 4, 8)
+    plt.hist(resultados['promedios'], bins=20, edgecolor='black', alpha=0.7)
+    plt.xlabel('Promedio')
+    plt.ylabel('Frecuencia')
+    plt.title('Histograma - Promedios')
+
+    plt.subplots_adjust(hspace=100, wspace=100)
     plt.tight_layout()
     plt.show()
 
