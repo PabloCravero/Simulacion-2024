@@ -8,23 +8,31 @@ corridas = int(sys.argv[2])
 numero = int(sys.argv[3])
 estrategia = str(sys.argv[4])
 capital = str(sys.argv[5])
+bancarrota = 0
+frecuencias_relativas = []
+resultados = {'flujo_cajas': [], 'ganancias_corrida': []}
 
 if (numero >= 0) and (numero <= 36):
     if len(sys.argv) == 6:
         print("Uso: python programa.py -n <num_valores>")
+        if capital == 'f':
+            monto = float(input("Ingrese el monto total a jugar: "))
+        else:
+            monto = float('inf')
+        apuesta = float(input("Ingrese el monto de la apuesta inicial: "))
+        monto_inicial = monto   
+        apuesta_inicial = apuesta     
+
         for _ in range(corridas):
             valores = [random.randint(0, 37) for _ in range(tiradas)]
-            print("Valores generados:", valores)
-            if capital == 'f':
-                monto = float(input("Ingrese el monto total a jugar: "))
-            else:
-                monto = float('inf')
-            apuesta = float(input("Ingrese el monto de la apuesta inicial: "))
-            apuesta_inicial = apuesta
-            monto_inicial = monto
-            bancarrota = 0
+            print("Valores generados:", valores)       
             fibonacci = [0, apuesta_inicial]
             ganancias = 0 #???
+            ganancias_corrida = []
+            salio = 0
+            numeros_corrida = []
+            frecuencias_relativas = []
+            flujo_caja = []
             for n in valores:
                 if estrategia == 'm':  #martingala
                     if n != numero:
@@ -34,18 +42,12 @@ if (numero >= 0) and (numero <= 36):
                             print("Monto actual: ", monto)
                             if monto <= 0:
                                 bancarrota += 1
-                                print("Bancarrota")
-                                monto = monto_inicial
-                                apuesta = apuesta_inicial
-                                print('monto bancarrota: ', monto)
-                                print('monto inicial: ', monto_inicial)
+                                print("Bancarrota: ", bancarrota)
+                                break
                         else:
                             ganancias = ganancias - apuesta
                             apuesta = apuesta * 2
                             print('Ganancias: ', ganancias)
-                            #rta = (str(input("Desea seguir jugando? (s/n): "))).lower()
-                            #if rta == 'n':
-                            #    break'''
                     else:
                         if capital == 'f':
                             monto += apuesta
@@ -55,9 +57,6 @@ if (numero >= 0) and (numero <= 36):
                             ganancias = ganancias + apuesta
                             apuesta = apuesta_inicial
                             print('Ganancias: ', ganancias)
-                            #rta = (str(input("Desea seguir jugando? (s/n): "))).lower()
-                            #if rta == 'n':
-                            #    break
                 elif estrategia == 'd': #d'alembert
                     if n != numero:
                         if capital == 'f':
@@ -67,10 +66,7 @@ if (numero >= 0) and (numero <= 36):
                             if monto <= 0:
                                 bancarrota += 1
                                 print("Bancarrota")
-                                monto = monto_inicial
-                                apuesta = apuesta_inicial
-                                print('monto bancarrota: ', monto)
-                                print('monto inicial: ', monto_inicial)
+                                break
                         else:
                             ganancias = ganancias - apuesta
                             apuesta = apuesta + 1
@@ -95,11 +91,7 @@ if (numero >= 0) and (numero <= 36):
                             if monto <= 0:
                                 bancarrota += 1
                                 print("Bancarrota")
-                                monto = monto_inicial
-                                apuesta = apuesta_inicial
-                                fibonacci = [0, apuesta_inicial]
-                                print('monto bancarrota: ', monto)
-                                print('monto inicial: ', monto_inicial)
+                                break
                         else: 
                             ganancias = ganancias - apuesta
                             apuesta = fibonacci[-1] + fibonacci[-2] 
@@ -141,14 +133,44 @@ if (numero >= 0) and (numero <= 36):
                             if monto <= 0:
                                 bancarrota += 1
                                 print("Bancarrota")
-                                monto = monto_inicial
-                                apuesta = apuesta_inicial
-                                print('monto bancarrota: ', monto)
-                                print('monto inicial: ', monto_inicial)
+                                break
                         else: 
                             ganancias = ganancias - apuesta
                             apuesta = apuesta_inicial
                             print('Ganancias: ', ganancias)
+                flujo_caja.append(monto)
+                ganancias_corrida.append(ganancias)
+            apuesta = apuesta_inicial
+            monto = monto_inicial
+            print("Flujo caja: ", flujo_caja)
+            print("Ganancias corrida: ", ganancias_corrida)
+            resultados['flujo_cajas'].append(flujo_caja)
+            resultados['ganancias_corrida'].append(ganancias_corrida)
+        
+        # Graficos
+        plt.figure(figsize=(18, 10))
+
+        # Primer subgráfico para el flujo de caja
+        plt.subplot(2, 1, 1)
+        for flujo_caja in resultados['flujo_cajas']:
+            plt.plot(flujo_caja)
+        plt.xlabel('n - Número de Tiradas')
+        plt.ylabel('CC - Cantidad Capital')
+        plt.title('Nube de Curvas - Flujo de Caja')
+        plt.axhline(y=monto, color='black', linestyle='--', label='Flujo de caja inicial')
+        plt.legend()
+
+        # Segundo subgráfico para la fluctuación de ganancias
+        plt.subplot(2, 1, 2)
+        for ganancias in resultados['ganancias_corrida']:
+            plt.plot(ganancias)
+        plt.xlabel('n - Número de Tiradas')
+        plt.ylabel('g - Ganancias')
+        plt.title('Nube de Curvas - Fluctuación de ganancia')
+        plt.subplots_adjust(hspace=0.5)
+        plt.tight_layout()
+        plt.show()
+
     else:
         print('Mal ingresados los datos')
         sys.exit(1)
