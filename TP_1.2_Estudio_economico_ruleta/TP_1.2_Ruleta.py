@@ -24,7 +24,7 @@ if (numero >= 0) and (numero <= 36):
         apuesta_inicial = apuesta     
 
         for _ in range(corridas):
-            valores = [random.randint(0, 37) for _ in range(tiradas)]
+            valores = [random.randint(0, 36) for _ in range(tiradas)]
             print("Valores generados:", valores)       
             fibonacci = [0, apuesta_inicial]
             ganancias = 0 #???
@@ -50,11 +50,11 @@ if (numero >= 0) and (numero <= 36):
                             print('Ganancias: ', ganancias)
                     else:
                         if capital == 'f':
-                            monto += apuesta
+                            monto += apuesta * 36
                             apuesta = apuesta_inicial
                             print("Monto actual: ", monto)
                         else:
-                            ganancias = ganancias + apuesta
+                            ganancias = ganancias + apuesta * 36
                             apuesta = apuesta_inicial
                             print('Ganancias: ', ganancias)
                 elif estrategia == 'd': #d'alembert
@@ -73,11 +73,11 @@ if (numero >= 0) and (numero <= 36):
                             print('Ganancias: ', ganancias)
                     else:
                         if capital == 'f':
-                            monto += apuesta
+                            monto += apuesta * 36
                             apuesta = apuesta - 1
                             print("Monto actual: ", monto)
                         else:
-                            ganancias = ganancias + apuesta
+                            ganancias = ganancias + apuesta * 36
                             apuesta = apuesta - 1
                             print('Ganancias: ', ganancias)
                 elif estrategia == 'f': # Fibonacci
@@ -101,14 +101,14 @@ if (numero >= 0) and (numero <= 36):
                             print(fibonacci)
                     else:
                         if capital == 'f':
-                            monto += apuesta
+                            monto += apuesta * 36
                             if len(fibonacci) > 3:
                                 apuesta = fibonacci[-3] 
                             fibonacci.append(apuesta)
                             print("Monto actual: ", monto)
                             print("fibonacci: ", fibonacci)
                         else:
-                            ganancias = ganancias + apuesta
+                            ganancias = ganancias + apuesta * 36
                             if len(fibonacci) > 3:
                                 apuesta = fibonacci[-3]
                             fibonacci.append(apuesta)
@@ -118,16 +118,16 @@ if (numero >= 0) and (numero <= 36):
                 elif estrategia == 'p': #paroli o martingala inversa
                     if n == numero:
                         if capital == 'f':
-                            monto += apuesta
+                            monto += apuesta * 36
                             apuesta = apuesta * 2
                             print("Monto actual: ", monto)
                         else:
-                            ganancias = ganancias + apuesta
+                            ganancias = ganancias + apuesta * 36
                             apuesta = apuesta * 2
                             print('Ganancias: ', ganancias)
                     else:
                         if capital == 'f':
-                            monto -= apuesta
+                            monto -= apuesta 
                             apuesta = apuesta_inicial
                             print("Monto actual: ", monto)
                             if monto <= 0:
