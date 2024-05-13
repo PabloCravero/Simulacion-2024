@@ -10,7 +10,9 @@ estrategia = str(sys.argv[4])
 capital = str(sys.argv[5])
 bancarrota = 0
 frecuencias_relativas = []
-resultados = {'flujo_cajas': [], 'ganancias_corrida': []}
+for i in range(tiradas):
+    frecuencias_relativas.append(0)
+resultados = {'flujo_cajas': [], 'ganancias_corrida': [], 'frecuencias_relativas': []}
 
 if (numero >= 0) and (numero <= 36):
     if len(sys.argv) == 6:
@@ -21,38 +23,39 @@ if (numero >= 0) and (numero <= 36):
             monto = float('inf')
         apuesta = float(input("Ingrese el monto de la apuesta inicial: "))
         monto_inicial = monto   
-        apuesta_inicial = apuesta     
+        apuesta_inicial = apuesta    
 
         for _ in range(corridas):
-            valores = [random.randint(0, 36) for _ in range(tiradas)]
+            valores = [random.randint(0, 5) for _ in range(tiradas)]
             print("Valores generados:", valores)       
             fibonacci = [0, apuesta_inicial]
             ganancias = 0 #???
             ganancias_corrida = []
-            salio = 0
-            numeros_corrida = []
-            frecuencias_relativas = []
+            #salio = 0
+            #numeros_corrida = []
             flujo_caja = []
+            contador = 0
             for n in valores:
                 if estrategia == 'm':  #martingala
                     if n != numero:
                         if capital == 'f':
                             monto -= apuesta
                             apuesta = apuesta * 2
-                            print("Monto actual: ", monto)
+                            #print("Monto actual: ", monto)
                             if monto <= 0:
                                 bancarrota += 1
-                                print("Bancarrota: ", bancarrota)
+                                #print("Bancarrota: ", bancarrota)
                                 break
                         else:
                             ganancias = ganancias - apuesta
                             apuesta = apuesta * 2
-                            print('Ganancias: ', ganancias)
+                            #print('Ganancias: ', ganancias)
                     else:
                         if capital == 'f':
                             monto += apuesta * 36
                             apuesta = apuesta_inicial
                             print("Monto actual: ", monto)
+                            frecuencias_relativas[contador] = frecuencias_relativas[contador] + 1 
                         else:
                             ganancias = ganancias + apuesta * 36
                             apuesta = apuesta_inicial
@@ -62,10 +65,10 @@ if (numero >= 0) and (numero <= 36):
                         if capital == 'f':
                             monto -= apuesta
                             apuesta = apuesta + 1
-                            print("Monto actual: ", monto)
+                            #print("Monto actual: ", monto)
                             if monto <= 0:
                                 bancarrota += 1
-                                print("Bancarrota")
+                                #print("Bancarrota")
                                 break
                         else:
                             ganancias = ganancias - apuesta
@@ -76,6 +79,7 @@ if (numero >= 0) and (numero <= 36):
                             monto += apuesta * 36
                             apuesta = apuesta - 1
                             print("Monto actual: ", monto)
+                            frecuencias_relativas[contador] = frecuencias_relativas[contador] + 1 
                         else:
                             ganancias = ganancias + apuesta * 36
                             apuesta = apuesta - 1
@@ -86,11 +90,11 @@ if (numero >= 0) and (numero <= 36):
                             monto -= apuesta
                             apuesta = fibonacci[-1] + fibonacci[-2] 
                             fibonacci.append(apuesta)  
-                            print("fibonacci: ", fibonacci)
-                            print("Monto actual: ", monto)
+                            #print("fibonacci: ", fibonacci)
+                            #print("Monto actual: ", monto)
                             if monto <= 0:
                                 bancarrota += 1
-                                print("Bancarrota")
+                                #print("Bancarrota")
                                 break
                         else: 
                             ganancias = ganancias - apuesta
@@ -107,6 +111,7 @@ if (numero >= 0) and (numero <= 36):
                             fibonacci.append(apuesta)
                             print("Monto actual: ", monto)
                             print("fibonacci: ", fibonacci)
+                            frecuencias_relativas[contador] = frecuencias_relativas[contador] + 1
                         else:
                             ganancias = ganancias + apuesta * 36
                             if len(fibonacci) > 3:
@@ -121,6 +126,7 @@ if (numero >= 0) and (numero <= 36):
                             monto += apuesta * 36
                             apuesta = apuesta * 2
                             print("Monto actual: ", monto)
+                            frecuencias_relativas[contador] = frecuencias_relativas[contador] + 1
                         else:
                             ganancias = ganancias + apuesta * 36
                             apuesta = apuesta * 2
@@ -129,7 +135,7 @@ if (numero >= 0) and (numero <= 36):
                         if capital == 'f':
                             monto -= apuesta 
                             apuesta = apuesta_inicial
-                            print("Monto actual: ", monto)
+                            #print("Monto actual: ", monto)
                             if monto <= 0:
                                 bancarrota += 1
                                 print("Bancarrota")
@@ -140,15 +146,30 @@ if (numero >= 0) and (numero <= 36):
                             print('Ganancias: ', ganancias)
                 flujo_caja.append(monto)
                 ganancias_corrida.append(ganancias)
+                contador += 1
             apuesta = apuesta_inicial
             monto = monto_inicial
-            print("Flujo caja: ", flujo_caja)
-            print("Ganancias corrida: ", ganancias_corrida)
             resultados['flujo_cajas'].append(flujo_caja)
             resultados['ganancias_corrida'].append(ganancias_corrida)
+
+        for i in range(tiradas):
+            print("i es:", i)
+            print("Frecuencias relativas en i:", frecuencias_relativas[i])
+            frecuencias_relativas[i] = frecuencias_relativas[i] / (i+1)
+        resultados['frecuencias_relativas'].append(frecuencias_relativas)
+        print("Frecuencias relativas: ", frecuencias_relativas)
         
         # Graficos
         plt.figure(figsize=(18, 10))
+
+        #Gráfico de bastones
+        plt.subplot(1,1,1)
+        plt.bar(range(tiradas), frecuencias_relativas, color='red')
+        plt.xlabel('n - Número de Tiradas')
+        plt.ylabel('Fr - Frecuencia Relativa')
+        plt.title('Frsa - Frecuencia Relativa de obtener la apuesta favorable según n')
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.show()
 
         # Primer subgráfico para el flujo de caja
         plt.subplot(2, 1, 1)
