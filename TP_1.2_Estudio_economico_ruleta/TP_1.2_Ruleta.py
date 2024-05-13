@@ -26,7 +26,7 @@ if (numero >= 0) and (numero <= 36):
         apuesta_inicial = apuesta    
 
         for _ in range(corridas):
-            valores = [random.randint(0, 5) for _ in range(tiradas)]
+            valores = [random.randint(0, 36) for _ in range(tiradas)]
             print("Valores generados:", valores)       
             fibonacci = [0, apuesta_inicial]
             ganancias = 0 #???
@@ -54,12 +54,12 @@ if (numero >= 0) and (numero <= 36):
                         if capital == 'f':
                             monto += apuesta * 36
                             apuesta = apuesta_inicial
-                            print("Monto actual: ", monto)
+                            #print("Monto actual: ", monto)
                             frecuencias_relativas[contador] = frecuencias_relativas[contador] + 1 
                         else:
                             ganancias = ganancias + apuesta * 36
                             apuesta = apuesta_inicial
-                            print('Ganancias: ', ganancias)
+                            #print('Ganancias: ', ganancias)
                 elif estrategia == 'd': #d'alembert
                     if n != numero:
                         if capital == 'f':
@@ -73,17 +73,17 @@ if (numero >= 0) and (numero <= 36):
                         else:
                             ganancias = ganancias - apuesta
                             apuesta = apuesta + 1
-                            print('Ganancias: ', ganancias)
+                            #print('Ganancias: ', ganancias)
                     else:
                         if capital == 'f':
                             monto += apuesta * 36
                             apuesta = apuesta - 1
-                            print("Monto actual: ", monto)
+                            #print("Monto actual: ", monto)
                             frecuencias_relativas[contador] = frecuencias_relativas[contador] + 1 
                         else:
                             ganancias = ganancias + apuesta * 36
                             apuesta = apuesta - 1
-                            print('Ganancias: ', ganancias)
+                            #print('Ganancias: ', ganancias)
                 elif estrategia == 'f': # Fibonacci
                     if n != numero:
                         if capital == 'f':
@@ -100,37 +100,37 @@ if (numero >= 0) and (numero <= 36):
                             ganancias = ganancias - apuesta
                             apuesta = fibonacci[-1] + fibonacci[-2] 
                             fibonacci.append(apuesta)
-                            print('apuesta: ', apuesta)
-                            print('Ganancias: ', ganancias)
-                            print(fibonacci)
+                            #print('apuesta: ', apuesta)
+                            #print('Ganancias: ', ganancias)
+                            #print(fibonacci)
                     else:
                         if capital == 'f':
                             monto += apuesta * 36
                             if len(fibonacci) > 3:
                                 apuesta = fibonacci[-3] 
                             fibonacci.append(apuesta)
-                            print("Monto actual: ", monto)
-                            print("fibonacci: ", fibonacci)
+                            #print("Monto actual: ", monto)
+                            #print("fibonacci: ", fibonacci)
                             frecuencias_relativas[contador] = frecuencias_relativas[contador] + 1
                         else:
                             ganancias = ganancias + apuesta * 36
                             if len(fibonacci) > 3:
                                 apuesta = fibonacci[-3]
                             fibonacci.append(apuesta)
-                            print('apuesta: ', apuesta)
-                            print('Ganancias: ', ganancias)
-                            print(fibonacci)
+                            #print('apuesta: ', apuesta)
+                            #print('Ganancias: ', ganancias)
+                            #print(fibonacci)
                 elif estrategia == 'p': #paroli o martingala inversa
                     if n == numero:
                         if capital == 'f':
                             monto += apuesta * 36
                             apuesta = apuesta * 2
-                            print("Monto actual: ", monto)
+                            #print("Monto actual: ", monto)
                             frecuencias_relativas[contador] = frecuencias_relativas[contador] + 1
                         else:
                             ganancias = ganancias + apuesta * 36
                             apuesta = apuesta * 2
-                            print('Ganancias: ', ganancias)
+                            #print('Ganancias: ', ganancias)
                     else:
                         if capital == 'f':
                             monto -= apuesta 
@@ -138,12 +138,12 @@ if (numero >= 0) and (numero <= 36):
                             #print("Monto actual: ", monto)
                             if monto <= 0:
                                 bancarrota += 1
-                                print("Bancarrota")
+                                #print("Bancarrota")
                                 break
                         else: 
                             ganancias = ganancias - apuesta
                             apuesta = apuesta_inicial
-                            print('Ganancias: ', ganancias)
+                            #print('Ganancias: ', ganancias)
                 flujo_caja.append(monto)
                 ganancias_corrida.append(ganancias)
                 contador += 1
@@ -153,11 +153,11 @@ if (numero >= 0) and (numero <= 36):
             resultados['ganancias_corrida'].append(ganancias_corrida)
 
         for i in range(tiradas):
-            print("i es:", i)
-            print("Frecuencias relativas en i:", frecuencias_relativas[i])
+            #print("i es:", i)
+            #print("Frecuencias relativas en i:", frecuencias_relativas[i])
             frecuencias_relativas[i] = frecuencias_relativas[i] / (i+1)
         resultados['frecuencias_relativas'].append(frecuencias_relativas)
-        print("Frecuencias relativas: ", frecuencias_relativas)
+        #print("Frecuencias relativas: ", frecuencias_relativas)
         
         # Graficos
         plt.figure(figsize=(18, 10))
