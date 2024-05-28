@@ -31,9 +31,6 @@ digits = 4  # Cantidad de dígitos
 GCL_gen = GCL(seed, a, c, m)
 SquareMiddle_gen = SquareMiddle(seed, digits)
 
-#print("Generador GCL: ", [next(GCL_gen) for _ in range(10)])
-#print("Generador Cuadrados Medios: ", [next(SquareMiddle_gen) for _ in range(10)])
-
 #Tests de los generadores
 
 #Test de bondad de ajuste Chi-cuadrado
