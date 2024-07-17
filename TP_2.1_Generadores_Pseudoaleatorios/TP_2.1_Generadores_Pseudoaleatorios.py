@@ -16,7 +16,9 @@ def SquareMiddle(seed, digits):
     x = seed
     while True:
         x = x ** 2
-        x = int(str(x).zfill(2 * digits)[digits // 2: -digits // 2])
+        x_str = str(x).zfill(2 * digits)
+        mid_start = (len(x_str) - digits) // 2
+        x = int(x_str[mid_start:mid_start + digits])
         yield x / 10 ** digits
 
 # Ejemplo de uso
@@ -69,7 +71,7 @@ def test_runs(generator, n):
     # Calcular el estadístico de prueba
     n = len(runs)
     mu = (2 * n1 * n2) / n + 1 # Media
-    sigma = (mu - 1) * (mu - 2) / (n - 1) # Desviación estándar
+    sigma = ((mu - 1) * (mu - 2) / (n - 1)) ** 0.5 # Desviación estándar
     z = (n1 - mu) / sigma ** 0.5 # Estadístico de prueba
     # Calcular el p-valor
     p_value = 2 * (1 - scipy.stats.norm.cdf(abs(z)))
