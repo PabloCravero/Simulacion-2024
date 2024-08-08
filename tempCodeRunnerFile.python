@@ -1,0 +1,44 @@
+import random
+
+def jugar_adivinanza():
+    numero_secreto = random.randint(1, 100)
+    intentos = 0
+    max_intentos = 10
+
+    print("¡Bienvenido al juego de adivinanza de números!")
+    print(f"Tienes {max_intentos} intentos para adivinar un número entre 1 y 100.")
+
+    while intentos < max_intentos:
+        try:
+            adivinanza = int(input(f"\nIntento {intentos + 1}. Ingresa tu adivinanza: "))
+            intentos += 1
+
+            if adivinanza < 1 or adivinanza > 100:
+                print("Por favor, ingresa un número entre 1 y 100.")
+                continue
+
+            if adivinanza == numero_secreto:
+                print(f"¡Felicidades! Has adivinado el número {numero_secreto} en {intentos} intentos.")
+                return True
+            elif adivinanza < numero_secreto:
+                print("Demasiado bajo. Intenta un número más alto.")
+            else:
+                print("Demasiado alto. Intenta un número más bajo.")
+
+        except ValueError:
+            print("Por favor, ingresa un número válido.")
+
+    print(f"\nLo siento, has agotado tus {max_intentos} intentos.")
+    print(f"El número secreto era {numero_secreto}.")
+    return False
+
+def main():
+    while True:
+        jugar_adivinanza()
+        jugar_nuevamente = input("\n¿Quieres jugar de nuevo? (s/n): ").lower()
+        if jugar_nuevamente != 's':
+            print("¡Gracias por jugar! Hasta la próxima.")
+            break
+
+if __name__ == "__main__":
+    main()
